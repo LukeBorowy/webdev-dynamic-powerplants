@@ -11,9 +11,9 @@ let templates_dir = "./templates";
 const cereal_stats = ["calories", "carbohydrates", "protein", "fat", "sugar"];
 const full_stats = ["type", "calories", "carbohydrates", "protein", "fat", "sugar", "name"];
 app.use(express.static(public_dir));
-app.get("/mfr/:mfr_id", (req, res) => {
+app.get("/source/:source", (req, res) => {
     // Only show: Name, calories, carbs, protein, fat, sugar
-    fs.readFile(path.join(templates_dir, "mfr.html"), (err, data) => {
+    fs.readFile(path.join(templates_dir, "source.html"), (err, data) => {
         db.serialize(function () {
             let cereals;
             db.all("SELECT * FROM Cereals WHERE mfr==?", req.params.mfr_id.toUpperCase(), (err, rows) => {
@@ -59,8 +59,33 @@ app.get("/mfr/:mfr_id", (req, res) => {
         });
     });
 });
-app.get("/cereal/:cereal", (req, res) => {
-    fs.readFile(path.join(templates_dir, "cereal.html"), (err, data) => {
+app.get("/country/:country", (req, res) => {
+    fs.readFile(path.join(templates_dir, "country.html"), (err, data) => {
+        db.serialize(function () {
+            let cereal_name = decodeURI(req.params.cereal);
+            db.get("SELECT * FROM Cereals join Types on Types.id==Cereals.type WHERE name==?", cereal_name, (err, rows) => {
+                if (err) {
+                    res.status(500).type("txt").send("<h1>500 sql error</h1>");
+                    console.log(err);
+                } else {
+                    let cereal = rows;
+                    let table_str = "";
+                    for (let nutrient of full_stats) {
+                        let thisRow = `<tr><td>${nutrient}</td><td>${cereal[nutrient]}</td></tr>`;
+                        table_str += thisRow;
+                    }
+                    let str_data = data.toString();
+                    str_data = str_data.replace("{{cereal_name}}", cereal.name);
+                    str_data = str_data.replace("{{table_data}}", table_str);
+                    res.status(200).type("html").send(str_data);
+                }
+                res.end();
+            });
+        });
+    });
+});
+app.get("/year/:year", (req, res) => {
+    fs.readFile(path.join(templates_dir, "year.html"), (err, data) => {
         db.serialize(function () {
             let cereal_name = decodeURI(req.params.cereal);
             db.get("SELECT * FROM Cereals join Types on Types.id==Cereals.type WHERE name==?", cereal_name, (err, rows) => {
@@ -86,14 +111,28 @@ app.get("/cereal/:cereal", (req, res) => {
 });
 app.get("/", (req, res) => {
     fs.readFile(path.join(templates_dir, "index.html"), (err, data) => {
-
         if (err) {
             res.status(500).type("txt").send("<h1>500 server error</h1>");
+            res.end();
         } else {
-            res.status(200).type("html").send(data);
+            let str_data = data.toString();
+            db.all("SELECT DISTINCT COUNTRY,COUNTRY_LONG FROM powerplant", (err, rows) => {
+                if (err) {
+                    res.status(500).type("txt").send("<h1>500 sql error</h1>");
+                    console.log(err);
+                } else {
+                    let list_str = "";
+                    for (let country of rows) {
+                        let thisRow = `<li><a href="/country/${country.country}">${country.country_long}</a></li>`;
+                        list_str += thisRow;
+                    }
+                    let str_data = data.toString();
+                    str_data = str_data.replace("{{country_list}}", list_str);
+                    res.status(200).type("html").send(str_data);
+                }
+                res.end();
+            });
         }
-        res.end();
-
     });
 });
 app.listen(port, () => {
