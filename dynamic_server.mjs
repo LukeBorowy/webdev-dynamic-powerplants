@@ -86,23 +86,14 @@ app.get("/cereal/:cereal", (req, res) => {
 });
 app.get("/", (req, res) => {
     fs.readFile(path.join(templates_dir, "index.html"), (err, data) => {
-        db.serialize(function () {
-            db.all("SELECT * FROM manufacturers", (err, rows) => {
-                if (err) {
-                    res.status(500).type("txt").send("<h1>500 sql error</h1>");
-                } else {
-                    let list_data = "";
-                    for (let man of rows) {
-                        let thisRow = `<li><a href="/mfr/${man['id']}">${man['name']}</a></li>`;
-                        list_data += thisRow;
-                    }
-                    let str_data = data.toString();
-                    str_data = str_data.replace("{{list_data}}", list_data);
-                    res.status(200).type("html").send(str_data);
-                }
-                res.end();
-            });
-        });
+
+        if (err) {
+            res.status(500).type("txt").send("<h1>500 server error</h1>");
+        } else {
+            res.status(200).type("html").send(data);
+        }
+        res.end();
+
     });
 });
 app.listen(port, () => {
