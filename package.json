@@ -6,7 +6,7 @@
         "name": "",
         "email": ""
     },
-    "contributors": [
+    "contributors": [ "Zach Majorowicz", "Hunter Heffernan", "Luke Borowy"
     ],
     "repository": {},
     "dependencies": {
