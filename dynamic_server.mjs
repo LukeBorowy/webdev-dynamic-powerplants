@@ -14,98 +14,61 @@ app.use(express.static(public_dir));
 app.get("/source/:source", (req, res) => {
     // Only show: Name, calories, carbs, protein, fat, sugar
     fs.readFile(path.join(templates_dir, "source.html"), (err, data) => {
-        db.serialize(function () {
-            let cereals;
-            db.all("SELECT * FROM Cereals WHERE mfr==?", req.params.mfr_id.toUpperCase(), (err, rows) => {
-                if (err) {
-                    res.status(500).type("txt").send("<h1>500 sql error</h1>");
-                    res.writeHead(500, { "Content-Type": "text/plain" });
-                    res.write("<h1>500 sql error</h1>");
-                    console.log(err);
-                    cereals = [];
-                } else {
-                    cereals = rows;
 
-                }
-            });
-            db.get("SELECT name FROM manufacturers WHERE id==?", req.params.mfr_id.toUpperCase(), (err, row) => {
-                if (err) {
-                    res.status(500).type("txt").send("<h1>500 sql error</h1>");
-                    console.log(err);
-                    cereals = [];
-                } else {
-                    let header_str = "<td>Name</td>";
-                    for (let stat of cereal_stats) {
-                        header_str += `<td>${stat}</td>`;
-                    }
-                    let table_str = "";
-                    for (let cereal of cereals) {
-                        let thisRow = "<tr>";
-                        thisRow += `<td><b><a href="/cereal/${cereal['name']}">${cereal['name']}</a><b></td>`;
-                        for (let nutrient of cereal_stats) {
-                            thisRow += `<td>${cereal[nutrient]}</td>`
-                        }
-                        thisRow += "</tr>";
-                        table_str += thisRow;
-                    }
-                    let str_data = data.toString();
-                    str_data = str_data.replace("{{nutrient_header}}", header_str);
-                    str_data = str_data.replace("{{manuf_name}}", row.name);
-                    str_data = str_data.replace("{{table_data}}", table_str);
-                    res.status(200).type("html").send(str_data);
-                };
-                res.end();
-            });
-        });
     });
 });
+
 app.get("/country/:country", (req, res) => {
     fs.readFile(path.join(templates_dir, "country.html"), (err, data) => {
-        db.serialize(function () {
-            let cereal_name = decodeURI(req.params.cereal);
-            db.get("SELECT * FROM Cereals join Types on Types.id==Cereals.type WHERE name==?", cereal_name, (err, rows) => {
-                if (err) {
-                    res.status(500).type("txt").send("<h1>500 sql error</h1>");
-                    console.log(err);
-                } else {
-                    let cereal = rows;
-                    let table_str = "";
-                    for (let nutrient of full_stats) {
-                        let thisRow = `<tr><td>${nutrient}</td><td>${cereal[nutrient]}</td></tr>`;
-                        table_str += thisRow;
-                    }
-                    let str_data = data.toString();
-                    str_data = str_data.replace("{{cereal_name}}", cereal.name);
-                    str_data = str_data.replace("{{table_data}}", table_str);
-                    res.status(200).type("html").send(str_data);
-                }
+        let country = decodeURI(req.params.country);
+        db.all("SELECT * FROM powerplant WHERE country==?", country, (err, rows) => {
+            if (err) {
+                res.status(500).type("txt").send("<h1>500 sql error</h1>");
+                console.log(err);
                 res.end();
-            });
+            } else {
+                let table_str = "";
+                for (let plant of rows) {
+                    let thisRow = `<tr><td><a href="/powerplant/${plant.gppd_idnr}">${plant.name}</a></td><td>${plant.capacity_mw}</td></tr>`;
+                    table_str += thisRow;
+                }
+                let str_data = data.toString();
+                str_data = str_data.replaceAll("{{country}}", rows[0].country_long);
+                str_data = str_data.replace("{{table_data}}", table_str);
+                str_data = str_data.replace("{{header}}", "<th>Name</th><th>Capacity</th>");
+                res.status(200).type("html").send(str_data);
+            }
+            res.end();
         });
     });
 });
 app.get("/year/:year", (req, res) => {
     fs.readFile(path.join(templates_dir, "year.html"), (err, data) => {
-        db.serialize(function () {
-            let cereal_name = decodeURI(req.params.cereal);
-            db.get("SELECT * FROM Cereals join Types on Types.id==Cereals.type WHERE name==?", cereal_name, (err, rows) => {
-                if (err) {
-                    res.status(500).type("txt").send("<h1>500 sql error</h1>");
-                    console.log(err);
-                } else {
-                    let cereal = rows;
-                    let table_str = "";
-                    for (let nutrient of full_stats) {
-                        let thisRow = `<tr><td>${nutrient}</td><td>${cereal[nutrient]}</td></tr>`;
-                        table_str += thisRow;
-                    }
-                    let str_data = data.toString();
-                    str_data = str_data.replace("{{cereal_name}}", cereal.name);
-                    str_data = str_data.replace("{{table_data}}", table_str);
-                    res.status(200).type("html").send(str_data);
+
+    });
+});
+app.get("/powerplant/:id", (req, res) => {
+    // Only show: Name, calories, carbs, protein, fat, sugar
+    fs.readFile(path.join(templates_dir, "powerplant.html"), (err, data) => {
+        db.get("SELECT * from powerplant WHERE gppd_idnr==?", req.params.id, (err, row) => {
+            if (err) {
+                res.status(500).type("txt").send("<h1>500 sql error</h1>");
+                console.log(err);
+                cereals = [];
+            } else {
+                let used_stats = [["capacity_mw", "Capacity"], ["primary_fuel", "Fuel"]];
+
+                let table_str = "";
+                for (let stat of used_stats) {
+                    let thisRow = `<tr><td>${stat[1]}</td><td>${row[stat[0]]}</td></tr>`;
+                    table_str += thisRow;
                 }
-                res.end();
-            });
+                let str_data = data.toString();
+                str_data = str_data.replaceAll("{{name}}", row.name);
+                str_data = str_data.replace("{{table_data}}", table_str);
+                res.status(200).type("html").send(str_data);
+            };
+            res.end();
         });
     });
 });
