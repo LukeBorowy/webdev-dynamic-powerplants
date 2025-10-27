@@ -2,3 +2,19 @@ h1 {
     color: red;
 }
 
+li {
+    background-color: lightgray;
+    border: 1px solid darkgray;
+    padding: 10px;
+    list-style-type: none;
+}
+
+li:last-child {
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+}
+
+li:first-child {
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+}
