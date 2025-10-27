@@ -51,10 +51,9 @@ app.get("/powerplant/:id", (req, res) => {
     // Only show: Name, calories, carbs, protein, fat, sugar
     fs.readFile(path.join(templates_dir, "powerplant.html"), (err, data) => {
         db.get("SELECT * from powerplant WHERE gppd_idnr==?", req.params.id, (err, row) => {
-            if (err) {
-                res.status(500).type("txt").send("<h1>500 sql error</h1>");
+            if (err || !row) {
+                res.status(500).type("html").send(`<h1>Failed to fetch data for ${req.params.id}</h1>`);
                 console.log(err);
-                cereals = [];
             } else {
                 let used_stats = [["capacity_mw", "Capacity"], ["primary_fuel", "Fuel"]];
 
@@ -86,7 +85,7 @@ app.get("/", (req, res) => {
                 } else {
                     let list_str = "";
                     for (let country of rows) {
-                        let thisRow = `<li><a href="/country/${country.country}">${country.country_long}</a></li>`;
+                        let thisRow = `<li><a href="/country/${country.country}">${country.country_long}</a><img src="/imgs/flags/${country.country}.png"</li>`;
                         list_str += thisRow;
                     }
                     let str_data = data.toString();
