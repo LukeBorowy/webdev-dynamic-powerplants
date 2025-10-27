@@ -1,9 +1,11 @@
 h1 {
-    color: red;
+    text-align: center;
+    color: rgb(0, 51, 95);
+    text-decoration-line: underline;
 }
 
 h2 {
-    color: blue;
+    color: rgb(0, 51, 95);
 }
 
 ul {
@@ -12,36 +14,36 @@ ul {
 }
 
 ul {
-    background-color: #dedede;
-    color: white;
-    border: 2px solid #c2ffff;
+    background-color: #6c9fff;
+    border: 2px solid #00b3ff;
     border-radius: 0.5rem;
-    padding: 0.75rem 1.5rem;
+    padding: 0.25rem;
     font-weight: bold;
     font-size: 1rem;
-    text-transform: uppercase;
     letter-spacing: 0.5px;
     box-shadow: 0 0.25rem 0.5rem rgba(0, 77, 171, 0.3);
 }
 
 ul:hover {
-    background-color: #dedede;
-    border-color: #c2ffff;
+    background-color: #83afff;
+    border-color: #00b3ff;
     box-shadow: 0 0.25rem 0.5rem rgba(0, 77, 171, 0.3);
     transform: translateY(-2px); /* gives the raise effect */
-}li {
-    background-color: lightgray;
-    border: 1px solid darkgray;
-    padding: 10px;
+}
+
+li {
+    background-color: rgb(238, 238, 238);
+    border: 1px solid rgb(190, 190, 190);
+    padding: 1rem;
     list-style-type: none;
 }
 
 li:last-child {
-    border-bottom-left-radius: 10px;
-    border-bottom-right-radius: 10px;
+    border-bottom-left-radius: 0.5rem;
+    border-bottom-right-radius: 0.5rem;
 }
 
 li:first-child {
-    border-top-left-radius: 10px;
-    border-top-right-radius: 10px;
+    border-top-left-radius: 0.5rem;
+    border-top-right-radius: 0.5rem;
 }
