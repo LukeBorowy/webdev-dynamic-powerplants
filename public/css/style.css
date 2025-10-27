@@ -45,3 +45,22 @@ li:first-child {
     border-top-left-radius: 10px;
     border-top-right-radius: 10px;
 }
+
+td,
+th {
+	border: 1px solid gray;
+}
+
+table {
+	border-spacing: 0;
+	border-collapse: collapse;
+	margin: 0 auto;
+}
+
+td {
+	padding: 5px;
+}
+tbody tr:nth-child(even) {
+  border-bottom: 0;
+  background-color: #f1f1f1;
+}
