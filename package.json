@@ -3,15 +3,14 @@
     "description": "Dynamic Server",
     "version": "1.0.0",
     "author": {
-        "name": "Luke Borowy",
-        "email": ""
+        "name": "Luke Borowy"
     },
     "contributors": [
         "Zach Majorowicz",
         "Hunter Heffernan",
         "Luke Borowy"
     ],
-    "repository": {},
+    "repository": "https://github.com/LukeBorowy/webdev-dynamic-powerplants",
     "dependencies": {
         "@canvasjs/charts": "^3.14.3",
         "express": "^5.1.0",
