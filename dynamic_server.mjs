@@ -134,7 +134,7 @@ app.get("/year/:year", (req, res) => {
                 table_str += thisRow;
             }
             let str_data = data.toString();
-            str_data = str_data.replaceAll("{{year}}", year);
+            str_data = str_data.replaceAll("{{year}}", year == 1 ? "Year Unknown" : year);
             str_data = str_data.replace("{{table_data}}", table_str);
             str_data = str_data.replace("{{header}}", "<th>Name</th><th>Capacity</th><th>Primary Fuel</th>");
             addPrevNext("FLOOR(commissioning_year)", "commissioning_year", "year", Math.floor(rows[0].commissioning_year), str_data, (str_data) => {
@@ -211,7 +211,7 @@ app.get("/", (req, res) => {
                     let list_str = "";
                     for (let row of rows) {
                         let thisRow = `<li>
-                                        <a href="/year/${row.cy}">${row.cy == 0 ? "Unknown" : row.cy} (${row.c} plants)</a>
+                                        <a href="/year/${row.cy}">${row.cy == 1 ? "Unknown" : row.cy} (${row.c} plants)</a>
                                         </li>`;
                         list_str += thisRow;
                     }
