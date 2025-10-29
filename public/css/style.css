@@ -1,4 +1,66 @@
 h1 {
-    color: red;
+    text-align: center;
+    color: rgb(0, 51, 95);
+    text-decoration-line: underline;
 }
 
+h2 {
+    color: rgb(0, 51, 95);
+}
+
+ul {
+
+    box-shadow: 1rem;
+}
+
+ul {
+    background-color: #6c9fff;
+    border: 2px solid #00b3ff;
+    border-radius: 0.5rem;
+    padding: 0.25rem;
+    font-weight: bold;
+    font-size: 1rem;
+    letter-spacing: 0.5px;
+    box-shadow: 0 0.25rem 0.5rem rgba(0, 77, 171, 0.3);
+}
+
+ul:hover {
+    background-color: #83afff;
+    border-color: #00b3ff;
+    box-shadow: 0 0.25rem 0.5rem rgba(0, 77, 171, 0.3);
+    transform: translateY(-2px); /* gives the raise effect */
+}
+
+li {
+    background-color: rgb(238, 238, 238);
+    border: 1px solid rgb(190, 190, 190);
+    padding: 1rem;
+    list-style-type: none;
+}
+
+li:last-child {
+    border-bottom-left-radius: 0.5rem;
+    border-bottom-right-radius: 0.5rem;
+}
+
+td,
+th {
+	border: 1px solid gray;
+}
+
+table {
+	border-spacing: 0;
+	border-collapse: collapse;
+	margin: 0 auto;
+}
+
+td {
+	padding: 5px;
+}
+tbody tr:nth-child(even) {
+  border-bottom: 0;
+  background-color: #f1f1f1;
+}
+.flag-img {
+    width: 200px;
+}
