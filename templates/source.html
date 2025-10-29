@@ -4,13 +4,28 @@
 <head>
 	<meta charset="utf-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1" />
-	<title>Manufacturer Index</title>
-	<link rel="stylesheet" href="/style.css" />
+	<title>{{source}} Power Plants</title>
+	<link rel="stylesheet" href="/css/style.css" />
 </head>
 
 <body>
-	<h1>Power Plants By Primary Source</h1>
-	
+	<div style="text-align: center;">
+		<a {{prev_url}}>Previous</a>
+		<h1 style="display: inline;">{{source}} Power Plants</h1>
+		<a {{next_url}}>Next</a>
+	</div>
+	<a style="text-align: center;display:block;" href="/">Home</a>
+	<table>
+		<thead>
+			<tr>
+				{{header}}
+			</tr>
+		</thead>
+		<tbody>
+			{{table_data}}
+		</tbody>
+	</table>
+
 </body>
 
 </html>

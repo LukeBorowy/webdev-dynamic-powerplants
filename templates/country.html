@@ -5,13 +5,57 @@
 	<meta charset="utf-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1" />
 	<title>Power plants in {{country}}</title>
-	<link rel="stylesheet" href="/style.css" />
 	<link rel="stylesheet" href="/css/style.css" />
+	<script src="https://cdn.canvasjs.com/canvasjs.min.js"></script>
+	<script type="application/javascript">
+
+		window.onload = function () {
+			var capacity_chart = new CanvasJS.Chart("capacityChartContainer", {
+				title: {
+					text: "Capacity(MW) by fuel type"
+				},
+				data: [
+					{
+						type: "pie",
+						dataPoints: [
+							{{ capacity_data }}
+				]
+			}
+            ]
+		});
+		capacity_chart.render();
+
+		var count_chart = new CanvasJS.Chart("countChartContainer", {
+			title: {
+				text: "Number of plants by fuel type"
+			},
+			data: [
+				{
+					type: "column",
+					dataPoints: [
+						{{ count_data }}
+			]
+		}
+            ]
+        });
+		count_chart.render();
+    }
+	</script>
 
 </head>
 
 <body>
-	<h1>Power Plants in {{country}}</h1>
+	<div style="text-align: center;">
+		<a {{prev_url}}>Previous</a>
+		<h1 style="display: inline;">Power Plants in {{country}}</h1>
+		<a {{next_url}}>Next</a>
+	</div>
+	<a style="text-align: center;display:block;" href="/">Home</a>
+	<div style="text-align:center">{{flag}}</div>
+	<div style="text-align: center;">
+		<div class="chart" id="capacityChartContainer"></div>
+		<div class="chart" id="countChartContainer"></div>
+	</div>
 	<table>
 		<thead>
 			<tr>

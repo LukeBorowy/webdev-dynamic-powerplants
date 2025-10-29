@@ -5,12 +5,17 @@
 	<meta charset="utf-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1" />
 	<title>{{name}}</title>
-	<link rel="stylesheet" href="/style.css" />
 	<link rel="stylesheet" href="/css/style.css" />
 </head>
 
 <body>
-	<h1>{{name}}</h1>
+	<div style="text-align: center;">
+		<a {{prev_url}}>Previous</a>
+		<h1 style="display: inline;">{{name}}</h1>
+		<a {{next_url}}>Next</a>
+	</div>
+	<a style="text-align: center;display:block;" href="/">Home</a>
+
 	<table>
 		<thead>
 			<tr>

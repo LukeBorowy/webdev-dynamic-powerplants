@@ -4,17 +4,28 @@
 <head>
 	<meta charset="utf-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1" />
-	<title>Manufacturer Index</title>
-	<link rel="stylesheet" href="/style.css" />
+	<title>Power Plants Commissined in {{year}} </title>
+	<link rel="stylesheet" href="/css/style.css" />
 </head>
 
 <body>
-	<h1>Power Plant Database</h1>
-	<a href="/by_country">By Country</a>
-    <br>
-	<a href="/by_source">By Source</a>
-    <br>
-	<a href="/by_source">By Source</a>
+	<div style="text-align: center;">
+		<a {{prev_url}}>Previous</a>
+		<h1 style="display: inline;">Power Plants Commissioned in {{year}}</h1>
+		<a {{next_url}}>Next</a>
+	</div>
+	<a style="text-align: center;display:block;" href="/">Home</a>
+	<table>
+		<thead>
+			<tr>
+				{{header}}
+			</tr>
+		</thead>
+		<tbody>
+			{{table_data}}
+		</tbody>
+	</table>
+
 </body>
 
 </html>
