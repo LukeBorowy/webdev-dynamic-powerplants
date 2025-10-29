@@ -85,7 +85,7 @@ app.get("/", (req, res) => {
                 } else {
                     let list_str = "";
                     for (let country of rows) {
-                        let thisRow = `<li><a href="/country/${country.country}">${country.country_long}</a><img src="/imgs/flags/${country.country}.png"</li>`;
+                        let thisRow = `<li><a href="/country/${country.country}">${country.country_long}</a><img class="flag-img" src="/imgs/flags/${country.country}.svg"</li>`;
                         list_str += thisRow;
                     }
                     let str_data = data.toString();
