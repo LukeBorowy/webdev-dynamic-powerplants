@@ -3,13 +3,17 @@
     "description": "Dynamic Server",
     "version": "1.0.0",
     "author": {
-        "name": "",
+        "name": "Luke Borowy",
         "email": ""
     },
-    "contributors": [ "Zach Majorowicz", "Hunter Heffernan", "Luke Borowy"
+    "contributors": [
+        "Zach Majorowicz",
+        "Hunter Heffernan",
+        "Luke Borowy"
     ],
     "repository": {},
     "dependencies": {
+        "@canvasjs/charts": "^3.14.3",
         "express": "^5.1.0",
         "sqlite3": "^5.1.7"
     }

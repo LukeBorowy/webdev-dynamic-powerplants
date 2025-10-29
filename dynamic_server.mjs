@@ -1,3 +1,4 @@
+
 import * as fs from "node:fs";
 import * as path from "node:path";
 import { default as express } from 'express';
@@ -8,11 +9,10 @@ let port = 8080;
 let app = express();
 let public_dir = "./public";
 let templates_dir = "./templates";
-const cereal_stats = ["calories", "carbohydrates", "protein", "fat", "sugar"];
-const full_stats = ["type", "calories", "carbohydrates", "protein", "fat", "sugar", "name"];
+
+
 app.use(express.static(public_dir));
 app.get("/source/:source", (req, res) => {
-    // Only show: Name, calories, carbs, protein, fat, sugar
     fs.readFile(path.join(templates_dir, "source.html"), (err, data) => {
 
     });
@@ -36,9 +36,28 @@ app.get("/country/:country", (req, res) => {
                 str_data = str_data.replaceAll("{{country}}", rows[0].country_long);
                 str_data = str_data.replace("{{table_data}}", table_str);
                 str_data = str_data.replace("{{header}}", "<th>Name</th><th>Capacity</th>");
-                res.status(200).type("html").send(str_data);
+                let query = "SELECT primary_fuel, sum(capacity_mw) AS capacity_mw, count(*) as fuel_count FROM powerplant WHERE country == ? GROUP BY primary_fuel;";
+                db.all(query, country, (err, rows) => {
+                    if (err) {
+                        res.status(500).type("txt").send("<h1>500 sql error</h1>");
+                        console.log(err);
+                        res.end();
+                    } else {
+                        let fuel_capacity = [];
+                        let fuel_count = [];
+                        for (let row of rows) {
+                            fuel_capacity.push("{label:\"" + row.primary_fuel + "\", y:" + row.capacity_mw + "}");
+                            fuel_count.push("{label:\"" + row.primary_fuel + "\", y:" + row.fuel_count + "}");
+                        }
+                        fuel_capacity = fuel_capacity.join();
+                        fuel_count = fuel_count.join();
+                        str_data = str_data.replace("{{capacity_data}}", fuel_capacity);
+                        str_data = str_data.replace("{{count_data}}", fuel_count);
+                        res.status(200).type("html").send(str_data);
+                        res.end();
+                    }
+                });
             }
-            res.end();
         });
     });
 });
@@ -54,7 +73,6 @@ app.get("/powerplant/:id", (req, res) => {
             if (err) {
                 res.status(500).type("txt").send("<h1>500 sql error</h1>");
                 console.log(err);
-                cereals = [];
             } else {
                 let used_stats = [["capacity_mw", "Capacity"], ["primary_fuel", "Fuel"]];
 
@@ -72,13 +90,13 @@ app.get("/powerplant/:id", (req, res) => {
         });
     });
 });
+
 app.get("/", (req, res) => {
     fs.readFile(path.join(templates_dir, "index.html"), (err, data) => {
         if (err) {
             res.status(500).type("txt").send("<h1>500 server error</h1>");
             res.end();
         } else {
-            let str_data = data.toString();
             db.all("SELECT DISTINCT COUNTRY,COUNTRY_LONG FROM powerplant", (err, rows) => {
                 if (err) {
                     res.status(500).type("txt").send("<h1>500 sql error</h1>");
