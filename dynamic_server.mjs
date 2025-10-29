@@ -1,3 +1,4 @@
+
 import * as fs from "node:fs";
 import * as path from "node:path";
 import { default as express } from 'express';
@@ -165,6 +166,7 @@ app.get("/powerplant/:id", (req, res) => {
         });
     });
 });
+
 app.get("/", (req, res) => {
     fs.readFile(path.join(templates_dir, "index.html"), (err, data) => {
         if (err) {
