@@ -25,7 +25,7 @@ ul {
 }
 
 li:hover {
-    background-color: #83afff;
+    background-color: #e0ebfe;
     border-color: #00b3ff;
     box-shadow: 0 0.25rem 0.5rem rgba(0, 77, 171, 0.3);
     transform: translateY(-2px); /* gives the raise effect */
@@ -55,22 +55,25 @@ table {
 	margin: 0 auto;
 }
 
-
 tbody tr:nth-child(even) {
   border-bottom: 0;
   background-color: #f1f1f1;
 }
+
 .flag-img {
     width: 200px;
     border: 1px solid black;
 }
+
 .country-name {
     display:inline-block;
     width: 200px;
 }
+
 .accordion-title {
     font-size: 2rem;
 }
+
 .chart {
     height:300px;
     width:40%;
